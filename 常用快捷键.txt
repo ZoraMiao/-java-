@@ -1,0 +1,11 @@
+Ctrl+C 复制
+Ctrl+V 粘贴
+Ctrl+A 全选
+Ctrl+S 保存
+Ctrl+X 剪切
+Ctrl+Z 撤销
+Ctrl+P 打印
+Win+E 打开资源管理器
+Win+D 显示桌面
+Win+R 运行
+Win+L 锁屏
