@@ -22,7 +22,7 @@ public class HeapOOM {
 ```java
 Exception in thread “main” java.lang.OutOfMemoryError: Java heap space 
 ```
-是不是很明显啊，显示堆空间发生OutOfMemoryError。<br>
+是不是很明显啊，显示堆空间发生OutOfMemoryError。<br><br>
 **虚拟机栈和本地方法栈溢出:** 如果线程请求的栈深度大于虚拟机所允许的醉倒深度，将抛出StackOverflowError异常；如果虚拟机在扩展栈时无法申请到足够的内存空间，则抛出OutOfMemoryError异常。<br>
 ```java
 /**
@@ -79,7 +79,7 @@ Exception in thread "main" java.lang.OutOfMemoryError: PermGen space
   at java.lang.String.intern(Native Method)
   at org.fenixsoft.oom.RuntimeConstantPoolOOM.main(RuntimeConstantPoolOOM.java:18)
 ```
-从运行结果中可以看到，运行时常量池溢出，在OutOfMemoryError后面跟随的提示信息是“PermGen space”(方法区容量)，说明运行时常量池属于方法区（HotSpot虚拟机中的永久代）的一部分。而使用JDK 1.7 运行这段程序就不会得到相同的结果，While循环将一直进行下去。<br>
+从运行结果中可以看到，运行时常量池溢出，在OutOfMemoryError后面跟随的提示信息是“PermGen space”(方法区容量)，说明运行时常量池属于方法区（HotSpot虚拟机中的永久代）的一部分。而使用JDK 1.7 运行这段程序就不会得到相同的结果，While循环将一直进行下去。<br><br>
 **本机直接内存溢出:** DirectMemory容量可以通过-XX:MaxDirectMemorySize指定。如果不指定，则默认与java堆最大值一样
 ```java
   /**
