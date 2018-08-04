@@ -64,3 +64,5 @@
   G1(Garbage First)收集器技术的前沿成果，是面向服务端的收集器，能充分利用CPU和多核环境。是一款并行与并发收集器，它能够建立可预测的停顿时间模型。
 ### 相关文章
   [垃圾收集器](https://blog.csdn.net/tjiyu/article/details/53983650)
+### 垃圾收集相关参数
+![](https://github.com/ZoraMiao/java/blob/master/垃圾收集相关参数.png)<br>
