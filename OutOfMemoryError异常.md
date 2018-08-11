@@ -23,7 +23,7 @@ public class HeapOOM {
 Exception in thread “main” java.lang.OutOfMemoryError: Java heap space 
 ```
 是不是很明显啊，显示堆空间发生OutOfMemoryError。<br><br>
-**虚拟机栈和本地方法栈溢出:** 如果线程请求的栈深度大于虚拟机所允许的醉倒深度，将抛出StackOverflowError异常；如果虚拟机在扩展栈时无法申请到足够的内存空间，则抛出OutOfMemoryError异常。<br>
+**虚拟机栈和本地方法栈溢出:** 如果线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常；如果虚拟机在扩展栈时无法申请到足够的内存空间，则抛出OutOfMemoryError异常。<br>
 ```java
 /**
  * VM Args:-Xss128k
