@@ -51,13 +51,13 @@
   垃圾收集算法是垃圾收集器的理论基础，而垃圾收集器就是其具体实现。下面介绍HotSpot虚拟机提供的几种垃圾收集器。**如果两个收集器之间存在连线，就说明他们可以搭配使用**<br>
   ![](https://images2018.cnblogs.com/blog/491706/201803/491706-20180306153700783-1725793368.png)
 ### 3.1. Serial/Serial Old
-  最古老的收集器，是一个单线程收集器，用它进行垃圾回收时，必须暂停所有用户线程。Serial是针对新生代的收集器，采用Copying算法；而Serial Old是针对老生代的收集器，采用Mark-Compact算法。优点是简单高效，缺点是需要暂停用户线程。
+  最古老的收集器，是一个单线程收集器，用它进行垃圾回收时，必须暂停所有用户线程。Serial是针对新生代的收集器，采用Copying算法；而Serial Old是针对老年代的收集器，采用Mark-Compact算法。优点是简单高效，缺点是需要暂停用户线程。
 ### 3.2. ParNew
   Seral/Serial Old的多线程版本，使用多个线程进行垃圾收集。
 ### 3.3. Parallel Scavenge
   新生代的并行收集器，回收期间不需要暂停其他线程，采用Copying算法。该收集器与前两个收集器不同，主要为了达到一个可控的吞吐量。
 ### 3.4. Parallel Old
-  Parallel Scavenge的老生代版本，采用Mark-Compact算法和多线程。
+  Parallel Scavenge的老年代版本，采用Mark-Compact算法和多线程。
 ### 3.5. CMS
   Current Mark Sweep收集器是一种以最小回收时间停顿为目标的并发回收器，因而采用Mark-Sweep算法。
 ### 3.6. G1
