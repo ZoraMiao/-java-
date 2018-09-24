@@ -1,11 +1,29 @@
-Ctrl+C ����
-Ctrl+V ճ��
-Ctrl+A ȫѡ
-Ctrl+S ����
-Ctrl+X ����
-Ctrl+Z ����
-Ctrl+P ��ӡ
-Win+E ����Դ������
-Win+D ��ʾ����
-Win+R ����
-Win+L ����
+Ctrl+C 复制
+Ctrl+V 粘贴
+Ctrl+A 全选
+Ctrl+S 保存
+Ctrl+X 剪切
+Ctrl+Z 撤销
+Ctrl+P 打印
+Win+E 打开资源管理器
+Win+D 显示桌面
+Win+R 运行
+Win+L 锁屏
+alt+A 截屏（qq）
+eclipse中:
+  alt+shift+L 抽取局部变量
+  ctrl+F11 运行
+  alt+shift+Z+3 加上if条件
+  alt+shift+Z+y 加上try-catch语句
+  F11  以debug的方式调试程序
+  eclipse中对话框字母下面有下划线的，可以通过alt+带有下滑线的字母 来切换焦点
+  F2 修改名称（包、类、文件名、项目名）
+  alt+shift+r  修改类中的变量名
+  ctrl+1  中可选择将局部变量转成成员变量
+  alt+shift+s  可以创建构造函数等等
+  alt+向上箭头  将选中的代码向上移动
+  ctrl+alt+向上或向下箭头  复制一段代码
+  ctrl+N  创建项目等
+  shift+向下箭头  可以选中多行代码
+  ctrl+D  删除
+  alt+?   可以补全剩余代码或者输出语句
