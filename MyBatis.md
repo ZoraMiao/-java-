@@ -34,3 +34,7 @@
 * **查询多于修改时使用二级缓存**
   * 在查询远远多于增删改的情况下可以使用二级缓存。因为任何增删改操作豆浆刷新二级缓存，对二级缓存的频繁刷新将降低系统性能。
 #### ehcache二级缓存
+* **步骤：**<br>
+ * 1）导入相应jar包
+ * 2）在映射文件mapper.xml中指定`<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>`
+ * 3）在src下加一个配置文件（ehcache-core-2.6.8.jar中的ehcache-failsafe.xml改名为ehcache.xml）
