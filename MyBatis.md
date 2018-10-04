@@ -11,3 +11,4 @@
 ### 一级缓存
 * mybatis的一级缓存是基于org.apache.ibatis.cache.impl.PerpetualCache类的HashMap本地缓存，其作用域是Sqlsession。在同一个Sqlsession中两次执行相同的sql查询语句，第一次执行完毕后，会将查询结果写入缓存中，第二次会从缓存中直接获取数据，而不再到数据库中进行查询，从而提高查询效率。
 * 当一个Sqlsession结束后，该Sqlsession中的一级缓存也就不存在了。**mybatis默认一级缓存是开启状态，且不能关闭。**
+ * 缓存的底层实现是一个Map,Map的value是查询结果、Map的key，即查询依据，使用ORM架构不同，查询依据是不同的。mybatis的查询依据是sql的id+SQL语句；hibernate的查询依据是，查询结果对象的id
