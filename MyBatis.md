@@ -11,4 +11,18 @@
 ### 一级缓存
 * mybatis的一级缓存是基于org.apache.ibatis.cache.impl.PerpetualCache类的HashMap本地缓存，其作用域是Sqlsession。在同一个Sqlsession中两次执行相同的sql查询语句，第一次执行完毕后，会将查询结果写入缓存中，第二次会从缓存中直接获取数据，而不再到数据库中进行查询，从而提高查询效率。
 * 当一个Sqlsession结束后，该Sqlsession中的一级缓存也就不存在了。**mybatis默认一级缓存是开启状态，且不能关闭。**
- * 缓存的底层实现是一个Map,Map的value是查询结果、Map的key，即查询依据，使用ORM架构不同，查询依据是不同的。mybatis的查询依据是sql的id+SQL语句；hibernate的查询依据是，查询结果对象的id
+ * 缓存的底层实现是一个Map,Map的value是查询结果、Map的key，即查询依据，使用ORM架构不同，查询依据是不同的。mybatis的查询依据是sql的id+SQL语句；hibernate的查询依据是，查询结果对象的id。
+ * 增删改操作都会清空一级缓存
+### 二级缓存
+#### 内置二级缓存
+* 由于mybatis从缓存中读取数据的依据与SQL的id相关，而非查询出的对象。所以，**使用二级缓存的目的，不是在多个查询间共享查询结果**（所有查询中只要查询结果中存在该对象，就直接从缓存中读取，这是对查询结果的共享，Hibernate中的缓存就是为了在多个查询间共享查询结果，但mybatis的不是），**而是为了防止同一查询（相同的Sql id、相同的Sql语句）的反复执行**
+* 开启内置的二级缓存步骤：
+ *  1）对实体进行序列化（即实体类要实现Serializable）
+ *  2）在映射文件中添加<cache/>标签
+**注意：**<br>
+>* 1、增删改同样也会清空二级缓存  
+ * 2、对于二级缓存的清空，实质上是对所查找key对应的value置为null，而并非将<key,value>对，即Entry对象删除   
+ * 3、从DB中进行select查询的条件是：
+  * 1）缓存中根本就不存在这个key所对应的Entry对象 
+  * 2）缓存中存在该key所对应的Entry对象，但其value为null
+#### ehcache二级缓存
