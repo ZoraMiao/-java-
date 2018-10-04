@@ -38,3 +38,10 @@
  * 1）导入相应jar包
  * 2）在映射文件mapper.xml中指定`<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>`
  * 3）在src下加一个配置文件（ehcache-core-2.6.8.jar中的ehcache-failsafe.xml改名为ehcache.xml）
+## 注解式开发
+* **注解的基础语法**
+ * A、注解后是没有分号的
+ * B、注解首字母是大写的，因为注解与类、接口是同一级别的。一个注解，后台对应着一个@interface类
+ * C、在同一语法单元上，同一注解只能使用一次
+ * D、在注解与语法单元之间可以隔若干空行、注释等非代码内容
+* 用@Insert、@Select、@Update、@Delete来代替映射文件，**但是这种注解式的不推荐使用，仍然推荐使用映射文件的方式。**
