@@ -23,6 +23,6 @@
 > 1、增删改同样也会清空二级缓存  
   2、对于二级缓存的清空，实质上是对所查找key对应的value置为null，而并非将<key,value>对，即Entry对象删除   
   3、从DB中进行select查询的条件是：<br>
-  > 1）缓存中根本就不存在这个key所对应的Entry对象 <br>
-  > 2）缓存中存在该key所对应的Entry对象，但其value为null
+  > * 1）缓存中根本就不存在这个key所对应的Entry对象 <br>
+  > * 2）缓存中存在该key所对应的Entry对象，但其value为null
 #### ehcache二级缓存
