@@ -55,4 +55,8 @@
   * public Object postProcessBeforeInitialization(Object bean,String beanId)throws BeansException  该方法会在**目标Bean初始化完毕之前**由容器自动调用
   * public Object postProcessAfterInitialization(final Object bean, String beanName) throws BeansException  该方法会在**目标Bean初始化完毕之后**由容器自动调用。
   * 它们的参数是：**第一个参数是系统即将初始化的Bean实例，第二个参数是该Bean实例的id属性值。若Bean没有id就是name属性值**。
-
+#### 2.2.5、定制Bean的生命始末
+* 可以为Bean定制初始化后的生命行为，也可以为Bean定制销毁前的生命行为。
+* 对于销毁方法的执行，有两个条件：
+		* 1）当前的Bean需要是singleton
+		* 2）要手工关闭容器
