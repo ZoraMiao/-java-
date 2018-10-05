@@ -47,3 +47,12 @@
  * （1）对于scope的值request、session与global session，只有在web应用中使用Spring时，该作用域才有效。
  * （2）对于scope的值为singleton的单例模式，**该Bean是在容器被创建时即被装配好了。**
  * （3）对于scope的值为prototype的原型模式，**Bean实例是在代码中使用该Bean实例时才进行装配的。**
+#### 2.2.4、Bean后处理器
+* Bean后处理器是一种特殊的Bean，容器中所有的Bean在初始化时，均会自动执行该类的两个方法。由于该Bean是由其它Bean自动调用执行，不是程序员手工调用，故此Bean无须id属性。
+* 需要做的是，在Bean后处理器类方法中，只要对Bean类与Bean类中的方法进行判断，就可实现对指定的Bean的指定方法进行功能扩展与增强。方法返向的Bean对象，即是增过的对象，
+* 代码中需要自定义Bean后处理器类。该类就是实现了接口BeanPostProcessor的类。该接口中包含两个方法，分别在目标Bean初始化**完毕之前与之后**执行，它们的返回值为：功能被扩展或增强后的Bean对象。
+* Bean初始化完毕有一个标志：一个方法将被执行。即当该方法被执行时，表示该Bean被初始化完毕。所以Bean后处理器中两个方法的执行，是在这个方法之前之后执行。
+ * public Object postProcessBeforeInitialization(Object bean,String beanId)throws BeansException  该方法会在**目标Bean初始化完毕之前**由容器自动调用
+ * public Object postProcessAfterInitialization(final Object bean, String beanName) throws BeansException  该方法会在**目标Bean初始化完毕之后**由容器自动调用。
+ * 它们的参数是：**第一个参数是系统即将初始化的Bean实例，第二个参数是该Bean实例的id属性值。若Bean没有id就是name属性值**。
+
