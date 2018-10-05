@@ -39,10 +39,10 @@
   * 将动态工厂Bean作为普通Bean来使用是指，在配置文件总注册过动态工厂Bean后，测试类直接通过getBean()获取工厂对象，再由工厂对象调用其相应方法创建相应的目标对象。配置文件中无需注册目标对象的Bean。因为目标对象的创建不由Spring容器来管理。
 #### 2.2.3、容器中Bean的作用域
 * 当通过Spring容器创建爱你一个Bean实例时，不仅可以完成Bean的实例化，还可以通过scope属性，为Bean指定特定的作用域。Spring支持5种作用域：
- * （1）**singleton:** 单例模式。使用singleton定义的Bean将是单例的，只用一个实例。**默认情况下是单例模式**
- * （2）**prototype：** 原型模式。即每次使用getBean方法获取的同一个<bean/>的实例都是一个新的实例。（常用）
- * （3）**request：** 对于每次HTTP请求，都将会产生一个不同的Bean实例。（不常用）
- * （4）**session：** 对于每个不同的HTTP session，都将产生一个不同的Bean实例。（不常用）
+  * （1）**singleton:** 单例模式。使用singleton定义的Bean将是单例的，只用一个实例。**默认情况下是单例模式**
+  * （2）**prototype：** 原型模式。即每次使用getBean方法获取的同一个<bean/>的实例都是一个新的实例。（常用）
+  * （3）**request：** 对于每次HTTP请求，都将会产生一个不同的Bean实例。（不常用）
+  * （4）**session：** 对于每个不同的HTTP session，都将产生一个不同的Bean实例。（不常用）
 * **注意：**
  * （1）对于scope的值request、session与global session，只有在web应用中使用Spring时，该作用域才有效。
  * （2）对于scope的值为singleton的单例模式，**该Bean是在容器被创建时即被装配好了。**
@@ -52,7 +52,7 @@
 * 需要做的是，在Bean后处理器类方法中，只要对Bean类与Bean类中的方法进行判断，就可实现对指定的Bean的指定方法进行功能扩展与增强。方法返向的Bean对象，即是增过的对象，
 * 代码中需要自定义Bean后处理器类。该类就是实现了接口BeanPostProcessor的类。该接口中包含两个方法，分别在目标Bean初始化**完毕之前与之后**执行，它们的返回值为：功能被扩展或增强后的Bean对象。
 * Bean初始化完毕有一个标志：一个方法将被执行。即当该方法被执行时，表示该Bean被初始化完毕。所以Bean后处理器中两个方法的执行，是在这个方法之前之后执行。
- * public Object postProcessBeforeInitialization(Object bean,String beanId)throws BeansException  该方法会在**目标Bean初始化完毕之前**由容器自动调用
- * public Object postProcessAfterInitialization(final Object bean, String beanName) throws BeansException  该方法会在**目标Bean初始化完毕之后**由容器自动调用。
- * 它们的参数是：**第一个参数是系统即将初始化的Bean实例，第二个参数是该Bean实例的id属性值。若Bean没有id就是name属性值**。
+  * public Object postProcessBeforeInitialization(Object bean,String beanId)throws BeansException  该方法会在**目标Bean初始化完毕之前**由容器自动调用
+  * public Object postProcessAfterInitialization(final Object bean, String beanName) throws BeansException  该方法会在**目标Bean初始化完毕之后**由容器自动调用。
+  * 它们的参数是：**第一个参数是系统即将初始化的Bean实例，第二个参数是该Bean实例的id属性值。若Bean没有id就是name属性值**。
 
