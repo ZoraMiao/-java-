@@ -37,3 +37,13 @@
 #### 2.2.2、动态工厂Bean
 * **（1）将动态工厂Bean作为普通Bean使用**<br>
   * 将动态工厂Bean作为普通Bean来使用是指，在配置文件总注册过动态工厂Bean后，测试类直接通过getBean()获取工厂对象，再由工厂对象调用其相应方法创建相应的目标对象。配置文件中无需注册目标对象的Bean。因为目标对象的创建不由Spring容器来管理。
+#### 2.2.3、容器中Bean的作用域
+* 当通过Spring容器创建爱你一个Bean实例时，不仅可以完成Bean的实例化，还可以通过scope属性，为Bean指定特定的作用域。Spring支持5种作用域：
+ * （1）**singleton:** 单例模式。使用singleton定义的Bean将是单例的，只用一个实例。**默认情况下是单例模式**
+ * （2）**prototype：** 原型模式。即每次使用getBean方法获取的同一个<bean/>的实例都是一个新的实例。（常用）
+ * （3）**request：** 对于每次HTTP请求，都将会产生一个不同的Bean实例。（不常用）
+ * （4）**session：** 对于每个不同的HTTP session，都将产生一个不同的Bean实例。（不常用）
+* **注意：**
+ * （1）对于scope的值request、session与global session，只有在web应用中使用Spring时，该作用域才有效。
+ * （2）对于scope的值为singleton的单例模式，**该Bean是在容器被创建时即被装配好了。**
+ * （3）对于scope的值为prototype的原型模式，**Bean实例是在代码中使用该Bean实例时才进行装配的。**
