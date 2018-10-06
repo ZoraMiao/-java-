@@ -76,3 +76,5 @@
      * 当配置文件中被调用者Bean的id值与代码中调用者Bean类的属性名称相同时，可使用byName方式，让容器自动将被调用者Bean注入给调用者。容器是通过调用者Bean类的属性名与配置文件的被调用者bean的id进行比较而实现自动注入的。**autowire="byName" 会从容器中查找与实体类的域属性同名的Bean的id，并将该Bean对象自动注入给该域属性**
   * **（2）byType方式在自动注入**
      * autowire="byType" 会从容器中查找与实体类的域属性类型具有 **is-a关系（子类）** 的Bean，并将该Bean对象自动注入给该域属性
+#### 2.3.3、使用SPEL注入
+* SPEL,Spring Expression Language,即Spring EL表达式语言。即在Spring配置文件中为Bean注入值时，可以用SPEL表达式计算的结果。**SPEL表达式以#开头，后跟一对大括号**。用法：<bean id="abc" value="#{...}"/>。
