@@ -87,7 +87,7 @@
 * 对于DI使用注解，将不再需要在Spring配置文件中声明Bean实例。Spring中使用注解，需要在原有Spring运行环境基础上再做一些改变，完成以下三个步骤：
   * （1）导入AOP的jar包，因为注解的后台实现用到了AOP编程
   * （2）需要更换配置文件头，即添加相应的约束
-  * （3）在配置文件中加上注解扫描标签，即：<context:component-scan base-package="..."/>
+  * （3）在配置文件中加上组件扫描标签，即：<context:component-scan base-package="..."/>
 #### 2.4.1、定义Bean @Component
 * 在类上定义这个标签，表示这个类将被Spring容器所管理，可以在标签后面加上括号，并赋值，表示这个Bean的id
 * 与@Component注解功能相同，但意义不同的注解还有三个：（ **用于之后程序的扩展** ）
@@ -99,9 +99,26 @@
 #### 2.4.3、基本类型属性注入@Value
 * 在类中基本类型属性的上面定义此标签，给这个属性赋以初值
 #### 2.4.4、按类型注入域属性@Autowired
+* byType方式的注解式注入，找配置文件指定的基本包中与这个对象的类型具有is-a关系的Bean
 #### 2.4.5、按名称注入域属性@Autowired与@Qualifier
+* byName方式的注解式注入,要求@Autowired与@Qualifier联合使用，**@Qualifier里面的值要与要注入的那个类的@Component中的值保持一致**
 #### 2.4.6、域属性注解@Resource
+* Spring提供了对JSR-250规范中定义@Resource标准注解的支持。@Resource注解既可以按名称匹配Bean，也可以按类型匹配Bean。使用该注解，要求JDK必须是6及以上版本。
+  * （1）按类型注入域属性
+      * @Resource注解不带任何参数，则会按照类型（byType类型进行Bean的匹配注入）
+  * （2）按名称注入域属性
+      * @Resource注解指定其name属性，则name的值即为按照名称进行匹配的Bean的id。
 #### 2.4.7、Bean的生命始末@PostConstruct与@PreDestroy
+* 在方法上使用@PostConstruct，与原来的配置文件中使用 **init-method** 等效，在方法上使用@PreDestory，与原来的配置文件中使用 **destory-method** 等效
 #### 2.4.8、使用JavaConfig进行配置（了解）
-#### 2.4.9、使用JUnit4测试Spring
+* 新建一个POJO类，在类上使用注解@Configuration（表示当前类充当Spring容器，所有的Bean都在这里创建），然后随意定义方法用来创建对象，在方法上使用注解@Bean(name="school")，并指定name的值，表示这个Bean的id，还可给其指定@Bean(name="myStudent",autowire=Autowire.BY_TYPE)：**指从当前类这个容器中查找与域属性的类型具有is-a关系的Bean**  或者@Bean(name="myStudent",autowire=Autowire.BY_NAME)：**指从当前类这个容器中查找与域属性同名的Bean的id**
+#### 2.4.9、使用Spring的JUnit4测试
+* 使用Spring的JUnit4对Spring代码进行测试，将不再需要在程序的代码中直接写出创建Spring容器，及从Spring容器中通过getBean()获取对象了。这些工作都将由JUnit4注解配合着 **域属性的自动注入注解** 共同完成。
+  * （1）导入jar包
+    * 除了Junit-4.9.jar外，还需要Spring框架的解压目录中的Spring与JUnit4的整合jar：spring-test-4.2.1.RELEASE.jar
+  * （2）在测试类上运用注解
+>    @RunWith(SpringJUnit4ClassRunner.class)<br>
+     @ContextConfiguration(locations="classpath:com/bjpowernode/di03/applicationContext.xml")
+  * （3）在测试类中定义域属性，并采用@Autowired自动注入
 #### 2.4.10、注解与XML共同使用
+* 配置文件XML的优先级高于注解，原因：**注解是加上类里面的，如果修改注解后保存，会重新编译这个类；而在XML中修改则不会重新编译，重启服务器就会自动更新这个文件**
