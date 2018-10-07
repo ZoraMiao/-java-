@@ -117,7 +117,7 @@
   * （1）导入jar包
     * 除了Junit-4.9.jar外，还需要Spring框架的解压目录中的Spring与JUnit4的整合jar：spring-test-4.2.1.RELEASE.jar
   * （2）在测试类上运用注解
->    @RunWith(SpringJUnit4ClassRunner.class)<br>
+  *  >@RunWith(SpringJUnit4ClassRunner.class)<br>
      @ContextConfiguration(locations="classpath:com/bjpowernode/di03/applicationContext.xml")
   * （3）在测试类中定义域属性，并采用@Autowired自动注入
 #### 2.4.10、注解与XML共同使用
