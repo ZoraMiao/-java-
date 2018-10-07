@@ -34,3 +34,4 @@ eclipse中:
   ctrl+t查看一个类或者接口的继承关系
   ctrl+o查看一个类或接口的结果
   ctrl+shift+F格式化代码
+  alt+shift+M 抽取方法
