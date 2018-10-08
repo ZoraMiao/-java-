@@ -55,7 +55,25 @@
   +（加号）：表示前一个字符出现一次或多次<br>
   \*（星号）：表示前一个字符出现0次或多次<br>
   eg:(.\*do.\*):表示方法全名（包括包名、接口名、方法名）中包含do的方法作为切入点方法
-
-
-
+### 3.5、自动代理生成器
+* 前面代码中所使用的代理对象，均是由ProxyFactoryBean代理工具类生成的。而该代理工具类存在着如下缺点：
+  * （1）若存在多个对象，就需要使用多次ProxyFactoryBean来创建代理对象，这会使配置文件变得臃肿，不便于管理
+  * （2）用户真正想调用的是目标对象，而真正可以调用的却是代理对象，这不符合正常逻辑
+* Spring提供了自动代理生成器，用于解决ProxyFactoryBean的问题。常用的自动代理生成器有两个：
+> 默认advisor自动代理生成器<br>
+  Bean名称自动代理生成器
+* 需要注意的是，自动代理生成器均继承自Bean后处理器BeanPostProcessor。容器中所有Bean在初始化时均会自动执行Bean后处理器中的方法，故其无需id属性。所以**自动代理生成器的Bean也没有id属性，客户类直接使用目标对象bean的id **。
+#### 3.5.1、默认advisor自动代理生成器DefaultAdvisorAutoProxyCreator
+* 用法(XML配置文件中):<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+* 这种代理也存在三个问题：
+  * 1）不能选择目标方法
+  * 2）不能选择切面类型，切面只能是advisor（顾问）
+  * 3）不能选择advisor ，所以advisor均将被作为切面织入到目标方法
+#### 3.5.2、Bean名称自动代理器
+* 根据bean的id，来为符合相应名称的类生成相应代理对象，且切面既可以是顾问Advisor又可以是通知Advice。
+> 用法：<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+          <property name="beanNames" value="myService"/>
+          <!-- <property name="interceptorNames" value="myAfter"/> -->
+          <property name="interceptorNames" value="myAdvisor"/>
+       </bean>
 
