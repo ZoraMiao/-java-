@@ -71,10 +71,12 @@
   * 3）不能选择advisor ，所以advisor均将被作为切面织入到目标方法
 #### 3.5.2、Bean名称自动代理器
 * 根据bean的id，来为符合相应名称的类生成相应代理对象，且切面既可以是顾问Advisor又可以是通知Advice。
-> 用法：
+```
+用法：
   <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
           <property name="beanNames" value="myService"/>
           <!-- <property name="interceptorNames" value="myAfter"/> -->
           <property name="interceptorNames" value="myAdvisor"/>
   </bean>
+```
 
