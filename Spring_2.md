@@ -96,12 +96,94 @@
 * 除了六中通知，还定义了专门的表达式用于指定切入点。表达式原型是：
 > execution(访问权限类型，返回值类型**（不可省）**，全限定性类名，方法名（参数名）**（不可省）**，抛出异常类型)
 * 表达式中符号的含义：
-  * \*:0至多个任意字符
-  * ..:用在方法参数中，表示任意多个参数，用在包名后，表示当前包及其子包路径
-  * +:用在类名后，表示当前类及其子类，用在接口后，表示当前接口及其实现类
+  * \* : 0至多个任意字符
+  * .. : 用在方法参数中，表示任意多个参数，用在包名后，表示当前包及其子包路径
+  * + : 用在类名后，表示当前类及其子类，用在接口后，表示当前接口及其实现类
+  * eg1：execution（\* \*.service.\*.\*(..)）：指定只有一级包下的service子包下的所有类（接口）中所有方法为切入点
+  * eg2：execution(\* \*..ISomeService.\*(..))：指定所有包下的ISomeService接口中所有方法为切入点
+#### 3.6.4、AspectJ的开发环境
+* **导入两个jar包**
+  * AspectJ是专门针对AOP问题的，所以其运行时需要AOP环境的，即需要之前的AOP的两个jar包。另外，还需要AspectJ自身的jar包：在Spring支持库解压目录中的子目录org.aspectj下有两个子包
+#### 3.6.5、AspectJ基于注解的AOP实现
+* AspectJ提供了一注解方式对于AOP的实现
+```java
+@Aspect  //表示当前类为切面
+public class MyAspect {
 
-
-
+	@Before("execution(* *..ISomeService.doFirst(..))")
+	public void before() {
+		System.out.println("执行前置通知方法");
+	}
+	@Before("execution(* *..ISomeService.doFirst(..))")
+	public void before(JoinPoint jp) {
+		System.out.println("执行前置通知方法:jp="+jp);
+	}
+	
+	@AfterReturning("execution(* *..ISomeService.doSecond(..))")
+	public void afterReturning() {
+		System.out.println("执行后置通知方法");
+	}
+	@AfterReturning(value="execution(* *..ISomeService.doSecond(..))",returning="result")  //returning内的值任意
+	public void afterReturning(Object result) {//参数名必须和returning的值保持一致，才能获取目标方法的返回值
+		System.out.println("执行后置通知方法:result="+result);
+	}
+	
+	@Around("execution(* *..ISomeService.doSecond(..))")
+	public Object myAround(ProceedingJoinPoint pjp) throws Throwable {
+		System.out.println("执行环绕通知：目标方法前");
+		Object result = pjp.proceed();
+		System.out.println("执行环绕通知：目标方法后");
+		if(result != null)
+			result = ((String)result).toUpperCase();
+		return result;
+	}
+	
+	@AfterThrowing("execution(* *..ISomeService.doThird(..))")
+	public void myAfterThrowing() {
+		System.out.println("执行异常通知");
+	}
+	@AfterThrowing(value="doThirdPointcut()", throwing="ex")
+	public void myAfterThrowing(Exception ex) {
+		System.out.println("执行异常通知:ex="+ex.getMessage());
+	}
+	
+	@After("doThirdPointcut()")
+	public void myFinally() {
+		System.out.println("执行最终通知");
+	}
+	
+	//定义一个可重用的切入点,名称为doThirdPointcut()
+	@Pointcut("execution(* *..ISomeService.doThird(..))")
+	public void doThirdPointcut() {}
+}
+```
+#### 3.6.6、AspectJ基于XML的AOP实现
+* 切面就是一个POJO类，而用于增强的方法就是普通方法。通过配置文件，将切面中的功能增强织入到了目标类的目标方法中。
+  ```
+   <!-- 注册切面 -->
+       <bean id="myAspect" class="com.bjpowernode.xml.MyAspect"/>
+       <aop:config>
+       	 <aop:pointcut expression="execution(* *..ISomeService.doFirst(..))" id="doFirstPointcut"/>
+       	 <aop:pointcut expression="execution(* *..ISomeService.doSecond(..))" id="doSecondPointcut"/>
+       	 <aop:pointcut expression="execution(* *..ISomeService.doThird(..))" id="doThirdPointcut"/>
+       	 <aop:aspect ref="myAspect">
+       	 <!-- 若只有一个前置通知，method直接等于方法名，若有两个及以上，则就要指定方法中参数的全限定名 -->
+       	 	<aop:before method="before" pointcut-ref="doFirstPointcut"/>
+       	 	<aop:before method="before(org.aspectj.lang.JoinPoint)" pointcut-ref="doFirstPointcut"/>
+       	 
+       	 	<aop:after-returning method="afterReturning" pointcut-ref="doSecondPointcut"/>
+       	 	<!-- returning="result"切面中方法的参数名称要与result保持一致 -->
+       	 	<aop:after-returning method="afterReturning(java.lang.Object)" pointcut-ref="doSecondPointcut" returning="result"/>
+       	
+       		 <aop:around method="myAround" pointcut-ref="doSecondPointcut"/>
+       		
+       	 	<aop:after-throwing method="myAfterThrowing" pointcut-ref="doThirdPointcut"/>
+       		 <aop:after-throwing method="myAfterThrowing(java.lang.Exception)" pointcut-ref="doThirdPointcut" throwing="ex"/>
+       	 
+       	 	<aop:after method="myFinally" pointcut-ref="doThirdPointcut"/>
+       	 </aop:aspect>
+       </aop:config>
+  ```
 
 
 
