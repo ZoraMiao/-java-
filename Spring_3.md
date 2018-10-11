@@ -57,8 +57,12 @@
 * c、 定义了默认事务超时时限
 * 常量TMEOUT DEFAULT定义了事务底层默认的超时时限，及不支持事务超时时限设置的none值。
 * 注意，事务的超时时限起作用的条件比较多，且超时的时间计算点较复杂。所以，该值-般就使用默认值即可。
-
-
+# 5、Spring与Mybatis
+* 将Spring与Mybatis进行整合，主要解决的问题就是将SqlSessionFactory对象交给Spring来管理。所以，该整合，只需要将SqlSessionFactory的对象生成器SqlSessionFactoryBean注册在Spring容器中，再将其注入给Dao的实现类即可完成整合。两种方式进行整合：
+  * （1）Mapper动态代理
+  * （2）支持扫描的Mapper动态代理
+# 6、Spring与Web
+* 创建一个servlet来获取Spring容器的对象，进而获取Service对象，就可以对数据库进行操作了。
 
 
 
