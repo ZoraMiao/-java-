@@ -79,7 +79,7 @@
           <property name="interceptorNames" value="myAdvisor"/>
   </bean>
 ```
-### AspectJ对AOP的实现
+### AspectJ对AOP的实现（重点）
 * 对于AOP这种编程思想，很多框架都进行了实现。Spring就是其中之一，可以完成面向切面编程。然而，AspectJ也实现了AOP的功能，且其实现方式更加简洁，使用更加方便，而且还支持注解式开发。所以，Spring又将AspectJ的对于AOP的实现也引入到了自己的框架中。
 * 在Spring中使用AOP开发时，一般使用AspectJ的实现方式。
 #### 3.6.1、AspectJ简介
