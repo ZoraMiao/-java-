@@ -36,4 +36,4 @@ eclipse中:
   ctrl+shift+F格式化代码
   alt+shift+M 抽取方法
   ctrl+shift+t 在eclipse中打开open Type
-  ctrl+k 向下搜索
+  ctrl+k 向下搜索(跟源码)
