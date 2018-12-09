@@ -77,7 +77,7 @@
   * **（2）byType方式在自动注入**
      * autowire="byType" 会从容器中查找与实体类的域属性类型具有 **is-a关系（子类）** 的Bean，并将该Bean对象自动注入给该域属性
 #### 2.3.3、使用SPEL注入
-* SPEL,Spring Expression Language,即Spring EL表达式语言。即在Spring配置文件中为Bean注入值时，可以用SPEL表达式计算的结果。**SPEL表达式以#开头，后跟一对大括号**。用法：<bean id="abc" value="#{...}"/>。
+* SPEL,Spring Expression Language,即Spring EL表达式语言。即在Spring配置文件中为Bean注入值时，可以用SPEL表达式计算的结果。**SPEL表达式以#开头，后跟一对大括号**。用法：`<bean id="abc" value="#{...}"/>`。
 #### 2.3.4、为应用指定多个Spring配置文件
 **（1）平等关系的配置文件**<br>
 * 将配置文件分解为地位相等的多个配置文件，并将所有配置文件的路径定义为一个String数组（ **或者采用通配符、又或者多个路径的配置文件** ），将其作为容器初始化参数出现。其将与可变参的容器构造器匹配。
