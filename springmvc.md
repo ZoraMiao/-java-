@@ -9,3 +9,11 @@
   * **后台路径的特例：** 当代码中使用response的sendRedirect()方法进行重定向时，其参照路径不是web应用的根路径，而是web服务器的根路径。
 * **注：jsp页面中的base标签会自动在当前页面的不以/开头的路径前加上basePath路径，使其变为绝对路径**
 ### SpringMVC也叫Spring web mvc，属于表现层的框架，在三层架构中属于View层。
+## 2、配置式开发
+* 是指“处理器类是程序员手工定义的、实现了特定接口的类，然后再在SpringMVC配置文件中对该类进行显示的、明确的注册”的开发方式。
+### 2.1.1 处理器映射器HandlerMapping
+* HandlerMapping接口负责根据request请求找到对应的Handler处理器及Interceptor拦截器，并将它们封装在HandlerExecutionChain对象中，返回给中央调度器。其常用的实现类有两种：
+  * BeanNameUrlHandlerMapping
+  * SimpleUrlHandlerMapping
+* **(1)BeanNameUrlHandlerMapping **
+  * 会根据请求的url与spring容器中定义的处理器bean的name属性值进行匹配，从而在spring容器中找到处理器bean实例。
