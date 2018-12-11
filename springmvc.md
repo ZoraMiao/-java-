@@ -15,5 +15,5 @@
 * HandlerMapping接口负责根据request请求找到对应的Handler处理器及Interceptor拦截器，并将它们封装在HandlerExecutionChain对象中，返回给中央调度器。其常用的实现类有两种：
   * BeanNameUrlHandlerMapping
   * SimpleUrlHandlerMapping
-* **(1)BeanNameUrlHandlerMapping **
+* ** (1)BeanNameUrlHandlerMapping **
   * 会根据请求的url与spring容器中定义的处理器bean的name属性值进行匹配，从而在spring容器中找到处理器bean实例。
