@@ -70,7 +70,7 @@
   * 对于内部资源的定义，也只能定义一种格式的资源：存放于同一目录的同一文件类型的资源文件。
 * BeanNameViewResolver，将资源封装为“Spring容器中注册的Bean实例”，ModelAndView通过设置视图名称为该Bean的id属性值来完成对该资源的访问。所以在springmvc.xml中，可以定义多个View视图Bean，让处理器中ModelAndView通过对这些Bean的id的引用来完成向View中封装资源的跳转。
 ```
-<!-- 定义内部资源视图   -->
+	<!-- 定义内部资源视图   -->
         <bean id="internalview" class="org.springframework.web.servlet.view.JstlView">
        		<property name="url" value="/WEB-INF/jsp/welcome.jsp"/>
         </bean>	
@@ -83,10 +83,73 @@
         <bean id="/my.do" class="com.zm.handler.MyController"/>
 ```
 #### （3）XMLViewResolver视图解析器
-
+* 如果配置文件中视图配置很多时，会使配置文件变得很庞大，所以可以将视图的定义单独放在一个xml文件中，然后在配置文件中引入即可。
+```
+  <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+	<property name="location" value="classpath:myViews.xml"/>
+  </bean>	
+```
 #### （4）ResourceBundleViewResolver视图解析器
-  
-  
+* 视图除了可以放在xml文件外，还可以放过在properties文件中，如下：这个时候setViewName中添加的就是taobao或jd或internalview
+properties文件：
+```
+taobao.(class)=org.springframework.web.servlet.view.RedirectView
+taobao.url=http://www.taobao.com
+
+jd.(class)=org.springframework.web.servlet.view.RedirectView
+jd.url=http://www.jd.com
+
+internalview.(class)=org.springframework.web.servlet.view.JstlView
+internalview.url=/WEB-INF/jsp/welcome.jsp
+```
+配置文件：
+```
+ <bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+	<property name="basename" value="myViews"/>
+	<!--如果xml中存在多个视图解析器，这个属性可以设置视图解析器的优先级，value必须是一个大于0的整数，值越小优先级越高-->
+	<property name="order" value="3"/>
+ </bean>	
+```
+#### （5）视图解析器的优先级
+* 视图解析器有一个order属性，专门用于设置对个视图解析器的优先级。**数字越小，优先级越高。数字相同，先注册的优先级高**。一般不为InternalResourceViewResolver解析器指定优先级，即让其优先级是最低的。如上述的例子。
+## 3、注解式开发（重点）
+* 所谓SpringMVC的注解式开发是指，处理器是基于注解的类的开发。对于每一个定义的处理器，无需在配置文件中逐个注册，只需在代码中通过对类与方法的注解，便可完成注册。即注册替换的是配置文件中对于处理器的注册部分。
+### 3.1、处理器的请求映射规则的定义
+#### 3.1.1、 对请求URL的命名空间的定义（!）
+* 如果处理器中很多地方的请求路径都包含/test，则可以在处理器的类前加上注解@RequestMapping("/test")，可以减少冗余
+#### 3.1.2、请求URL中通配符的应用(了解)
+#### 3.1.3、对请求提交方式的定义（了解）
+* 对于@RequestMapping()，其有一个睡醒method，用于对被注解方法所处理请求的提交方式进行限制，即只有满足该method属性指定的提交方式的请求，才会执行该被注解方法。
+* method属性取值为RequestMethod枚举常量，常用的为RequestMethod.GET与RequestMethod.POST，分别表示提交方式的匹配规则WieGET与POST提交。
+* 几种默认请求方式的提交方式：
+  * 表单请求       默认为GET，可以指定POST
+  * AJAX请求       默认为GET，可以指定为POST
+  * 地址栏请求     GET请求
+  * 超链接请求     GET请求
+  * src资源路径请求  GET请求
+#### 3.1.4、对请求中携带参数的定义（了解）
+### 3.2、处理器方法的参数
+* 处理器方法中常用的参数有五类，这些参数会在系统调用时有系统自动赋值，即程序员可在方法内直接使用。
+  * HttpServletRequest
+  * HttpServletResponse
+  * HttpSession
+  * 用于承载数据的Model
+  * 请求中所携带的请求参数
+#### 3.2.1、逐个参数接收
+* 只要保证请求参数名与该请求处理方法的参数名相同即可。
+#### 3.2.2、请求参数中文乱码问题
+#### 3.2.3、校正请求参数名@RequestParam
+#### 3.2.4、整体参数接收
+#### 3.2.5、域属性参数的接收
+#### 3.2.6、路径变量@PathVariable
+### 3.3、处理器方法的返回值
+
+
+
+
+
+
+
   
   
   
