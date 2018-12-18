@@ -222,11 +222,31 @@ internalview.url=/WEB-INF/jsp/welcome.jsp
 #### 4.2.3、异常处理注解@ExceptionHandler
 * 使用注解@ExceptionHandler可以将一个方法指定为异常处理方法。该注解只有一个可选属性value，为一个Class<?>数组，用于指定该注解的方法所要处理的异常类，即所要匹配的异常。
 ### 4.3、类型转换器
+* 表单提交的无论是int还是double类型的请求参数，用于处理该请求的处理器方法的形参，均可直接接收到相应类型的相应数据，而非接收到String再手工转换。这是因为在SpringMVC框架中，有默认的类型转换器。这些默认的类型转换器，可以将String类型的数据，自动转换为相应类型的数据。
+* 类型转换器的注册分为三步：**①注册类型转换器 ②注册类型转换服务 ③注册MVC注解驱动**
+#### 4.3.1、数据回显
+* 发生类型转换异常时，希望返回到表单页面，让用户重新填写，需要将异常捕捉，然后通过异常处理器跳转到指定页面。
+* **注意：** SimpleMappingExceptionResolver捕获的是处理器方法在执行过程中发生的异常，而类型转换异常发生在处理器方法执行之前。所以使用SimpleMappingExceptionResolver将无法捕获到类型转换异常。但注解式异常处理是可以获取到类型转换异常的。
 ### 4.4、初始化参数绑定
+* 只需在处理器的代码中添加一个方法，该方法有@InitBinder注解，由数据绑定器WebDataBinder作为参数。即可在请求中所携带的参数被处理器方法接收之前先进行类型编辑器的绑定操作，实现对特定类型数据的类型转换。
+```java
+	//初始化参数绑定
+	@InitBinder
+	public void dateBinder(WebDataBinder binder) {
+		//注册自定义编辑器
+		//参数一：要转换为的目标类型
+		//参数二：类型编辑器
+		binder.registerCustomEditor(Date.class, new MydateEditor());
+	}
+```
 ### 4.5、数据验证
+* SpringMVC支持JSR（Java Specification Requests，Java规范提案）303 - Bean Validation数据验证规范。其中较为常用的是Hibernate Validation
 ### 4.6、文件上传
 ### 4.7、拦截器
-
+* SpringMVC中的Interceptor拦截器是非常重要和相当有用的，它的主要作用是拦截指定哪个的用户请求，并进行形影额预处理与后处理。其拦截的时间点在“处理器映射器根据用户提交的请求映射出了所要执行的处理器类，并且也找到了要执行该处理器类的处理器适配器，在处理器适配器执行处理器之前”。当然，在处理器映射器映射出所要执行的处理器类时，已经将拦截器与处理器组合为了一个处理器执行链，并返回给了中央调度器。
+## SSM整合开发
+* SSM编程，即SpringMVC + Spring + Mybatis，是当前最流行的JavaEE开发技术架构。其实SSM整合的实质，仅仅就是将Mybatis整合入Spring。因为SpringMVC原本就是Spring的一部分，不用专门整合。
+* SSM整合的实现方式可分为两种：**基于XML配置式开发** 、**基于注解方式**
 
 
 
