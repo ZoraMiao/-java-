@@ -138,13 +138,94 @@ internalview.url=/WEB-INF/jsp/welcome.jsp
 #### 3.2.1、逐个参数接收
 * 只要保证请求参数名与该请求处理方法的参数名相同即可。
 #### 3.2.2、请求参数中文乱码问题
+* 在web.xml中添加字符过滤器
 #### 3.2.3、校正请求参数名@RequestParam
+* 解决表单提交的参数名与处理器方法中参数名不一致问题，做映射
+```java
+	public ModelAndView doFirst(@RequestParam("pname") String name, int age){}
+```
 #### 3.2.4、整体参数接收
+* 将所有的参数定义成一个实体，然后保持表单的参数名与实体中定义的属性名相同，之后就可以在处理器的方法参数中，可以接受整体参数。
 #### 3.2.5、域属性参数的接收
+* 所谓域属性，即对象属性。当请求参数中的数据为某类对象域属性的属性值时，要求请求参数名为“域属性.属性”。例如：
+```
+  <!-- 域属性的接收 -->
+  学校：<input type="text" name="school.sname">
+  校址：<input type="text" name="school.address">
+```
 #### 3.2.6、路径变量@PathVariable
+* 对于处理器方法中所接收的请求参数，可以来自于请求中所携带的参数，也可以来自于请求的URL中所携带的变量，即路径变量。不过此时，需要借助@PathVariable注解。
+* @PathVariable在不指定参数的情况下，默认其参数名，即路径变量名与用于接收其值得属性名相同。若路径变量名与用于接收其值得属性名不同，则@PathVariable可通过参数指出路径变量名称。
 ### 3.3、处理器方法的返回值
-
-
+#### 3.3.1、返回ModelAndView
+* 若处理器方法处理完后，需要跳转到其他资源，且又要在跳转的资源间传递数据。此时处理器方法返回ModelAndView比较好。若要返回ModelAndView，则处理器方法中需要定义ModelAndView对象。
+* 在使用时，若该处理器方法只是进行跳转而不传递数据，或只是传递数据而并不向任何资源跳转（如对页面的AJAX异步响应），此时若返回ModelAndView，则将总是有一部分多余：要么Model多余，要么View多余。即此时返回ModelAndView不合适。
+#### 3.3.2、返回String
+* 处理器方法返回的字符串可以指定逻辑视图名，通过视图解析器可以将其转换为物理视图地址。
+##### （1）返回内部资源逻辑视图名
+* 若要跳转的资源为内部资源，则视图解析器可以使用InternalResourceViewResolver内部资源视图解析器。此时处理器方法返回的字符串就是要跳转页面的文件名去掉文件扩展名后的部分。这个字符串与视图解析器中的prefix、suffix相结合，即可形成要访问的URL。
+##### （2）返回View对象名
+```
+	<!-- 定义外部资源视图   -->
+        <bean id="taobao" class="org.springframework.web.servlet.view.RedirectView">
+       		<property name="url" value="http://taobao.com"/>
+        </bean>	
+		<!-- 定义外部资源视图   -->
+        <bean id="jd" class="org.springframework.web.servlet.view.RedirectView">
+       		<property name="url" value="http://jd.com"/>
+        </bean>	
+        
+		<!--  定义视图解析器      -->
+        <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>	
+```
+#### 3.3.3、返回void
+##### (1)通过ServletAPI传递数据并完成跳转
+* 可在方法参数中放入HTTPServletRequest或HTTPSession，使方法中可以直接将数据放入到request、session的域中，也可以通过request.getServletContext()获取到ServletContext，从而将数据放入到application的域中。
+* 可在方法参数中放入HTTPServletRequest与HTTPServletSession，使方法可以完成请求转发与重定向。
+##### (2)AJAX响应
+#### 3.3.4、返回Object
+* 处理器方法也可以返回Object对象。但返回的这个Object对象不是作为逻辑视图出现的，而是作为直接在页面显示的数据出现的。
+* 返回Object对象，需要使用@ResponseBody注解，将转换后的JSON数据放入到响应体中。
+* 将Object数据转化为JSON数据，需要由HTTPMessageConverter完成。而转换器的开启，需要由`<mvc:annontation-driven/>`完成
+##### （1）返回数值型对象
+```
+@RequestMapping(value="/myAjax.do")
+	@ResponseBody   //将返回的数据放入响应体中
+	public Object doAjax() {
+		return "1234";
+	}
+```
+##### （2）返回字符串对象
+* 如果有中文，会出现乱码问题只需要在@RequestMapping加上`produces="text/html;charset=utf-8"`即可
+```
+@RequestMapping(value="/myAjax.do", produces="text/html;charset=utf-8")
+```
+##### （3）返回自定义类型对象
+* 返回自定义类型对象时，不能以对象的形式直接返回给客户端浏览器，而是将对象转换为JSON格式的数据发送给浏览器的。
+##### （4）返回Map集合
+##### （5）返回List集合
+## 4、SpringMVC核心技术
+### 4.1、请求转发与重定向
+* 当处理器对请求处理完毕后，向其它资源进行跳转时，有两种跳转方式：请求转发与重定向。而根据所要跳转的资源类型，又可分为两类：跳转到页面与跳转到其它处理器。
+#### 4.1.1、返回ModelAndView时的请求转发
+* 默认情况下，当处理器方法返回ModelAndView时，跳转到指定的View，使用的是请求转发，但也可显示的进行指出。此时，需在setViewName()指定的视图前添加forward，且此时的视图不会再与视图解析器中的前缀与后缀进行拼接。即 **必须写出相对于项目根的路径** 。故此时的视图解析器不再需要前缀与后`mv.setViewName("forward:......")`
+### 4.2、异常处理
+* 常用的SpringMVC异常处理方式主要有三种：
+  * 使用系统定义好的异常处理器SimpleMappingExceptionResolver
+  * 使用自定义异常处理器
+  * 使用异常处理注解
+#### 4.2.1、SimpleMappingExceptionResolver异常处理器
+* 该方式只需要在SpringMVC配置文件中注册该异常处理器Bean即可。该Bean比较特殊，没有id属性，无需显示调用或被注入给其它<bean/>，当异常发生时会自动执行该类。
+#### 4.2.2、自定义异常处理器HandlerExceptionResolver
+* 使用SpringMVC定义好的SimpleMappingExceptionResolver异常处理器，可以实现发生指定异常后的跳转。但若要实现在捕获到异常时，执行一些操作的目的，它是完成不了的。此时，就需要自定义异常处理器。
+* 自定义异常处理器，需要实现HandlerExceptionResolver接口，并且该类需要在SpringMVC配置文件中进行注册。
+#### 4.2.3、异常处理注解@ExceptionHandler
+* 使用注解@ExceptionHandler可以将一个方法指定为异常处理方法。该注解只有一个可选属性value，为一个Class<?>数组，用于指定该注解的方法所要处理的异常类，即所要匹配的异常。
+### 4.3、类型转换器
+### 4.4、初始化参数绑定
+### 4.5、数据验证
+### 4.6、文件上传
+### 4.7、拦截器
 
 
 
